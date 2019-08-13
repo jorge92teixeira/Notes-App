@@ -25,5 +25,6 @@ app.use(bodyParser.json());
 app.use('/api/notes', notesRouter);
 
 app.use(middleware.unknownEndpoint);
+app.use(middleware.errorHandler);
 
 module.exports = app;

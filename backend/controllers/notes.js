@@ -9,6 +9,19 @@ notesRouter.get('/', async (req, res) => {
 });
 
 // Create Note 
+notesRouter.post('/', async (req, res, next) => {
+  console.log(req.body, 'req.body')
+  try {
+    const note = new Note ({
+      ...req.body,
+    })
+    await note.save();
+    res.status(201).send(note);
+  }catch (e) {
+    console.log(e.name, 'error')
+    next(e);
+  }
+});
 
 
 module.exports = notesRouter;
