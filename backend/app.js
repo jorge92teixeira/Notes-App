@@ -17,9 +17,9 @@ mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true })
   })
   .catch((error) => {
     console.log(`error connecting to mongodb: ${error.message}`);
-  })
+  });
 
-app.use(cors()); 
+app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/api/notes', notesRouter);
