@@ -9,6 +9,9 @@ const errorHandler = (error, req, res, next) => {
   if (error.name === 'CastError') {
     return res.status(400).send({ errName: error.name, errMsg: error.message });
   }
+  if (error.name === 'SyntaxError') {
+    return res.status(400).send({ errName: error.name, errMsg: error.message });
+  }
 
   return next(error);
 };

@@ -2,6 +2,7 @@
 /* eslint-disable no-underscore-dangle */
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
+const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -11,23 +12,34 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: [true, "can't be blank"],
+    required: true,
     unique: true,
     trim: true,
     match: [/\S+@\S+\.\S+/, 'is invalid'],
     index: true,
   },
-  passwordHash: String,
+  password: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 8,
+  },
 }, { timestamps: true });
 
-userSchema.plugin(uniqueValidator, { message: 'is already taken' });
+userSchema.plugin(uniqueValidator);
+
+userSchema.pre('save', async function pre(next) {
+  const user = this;
+  user.password = await bcrypt.hash(user.password, 10);
+  next();
+});
 
 userSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
     delete returnedObject.__v;
-    delete returnedObject.passwordHash;
+    delete returnedObject.password;
   },
 });
 
