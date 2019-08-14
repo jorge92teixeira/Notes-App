@@ -36,4 +36,17 @@ usersRouter.post('/', async (req, res, next) => {
   }
 });
 
+// Delete User by Id
+usersRouter.delete('/:id', async (req, res, next) => {
+  try {
+    const { deletedCount } = await User.deleteOne({ _id: req.params.id });
+    if (deletedCount === 0) {
+      res.status(404).end();
+    }
+    return res.status(204).end();
+  } catch (e) {
+    next(e);
+  }
+});
+
 module.exports = usersRouter;
