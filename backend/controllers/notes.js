@@ -5,21 +5,31 @@ const Note = require('../models/note');
 notesRouter.get('/', async (req, res) => {
   const notes = await Note.find({});
 
-  res.json(notes.map(note => note.toJSON()));
+  res.json(notes.map((note) => note.toJSON()));
 });
 
-// Create Note 
+// Create Note
 notesRouter.post('/', async (req, res, next) => {
-  console.log(req.body, 'req.body')
   try {
-    const note = new Note ({
+    const note = new Note({
       ...req.body,
-    })
+      pinned: req.body.pinned || false,
+      hidden: req.body.hidden || false,
+    });
     await note.save();
     res.status(201).send(note);
-  }catch (e) {
-    console.log(e.name, 'error')
+  } catch (e) {
     next(e);
+  }
+});
+
+// Delete Note By Id
+notesRouter.delete('/:id', async (req, res, next) => {
+  try {
+    await Note.deleteOne({ _id: req.params.id });
+    return res.status(204).end();
+  } catch (e) {
+    return next(e);
   }
 });
 

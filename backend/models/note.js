@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-param-reassign */
 const mongoose = require('mongoose');
 
 const noteSchema = new mongoose.Schema({
@@ -18,7 +20,7 @@ const noteSchema = new mongoose.Schema({
   },
   hidden: {
     type: Boolean,
-  }
+  },
 });
 
 noteSchema.set('toJSON', {
