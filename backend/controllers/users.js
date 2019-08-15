@@ -1,8 +1,12 @@
+/* eslint-disable no-underscore-dangle */
 const usersRouter = require('express').Router();
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const { auth } = require('../utils/middleware');
 
 // Get All Users
-usersRouter.get('/', async (req, res, next) => {
+usersRouter.get('/', auth, async (req, res, next) => {
   try {
     const users = await User.find({});
     res.send(users);
@@ -12,7 +16,7 @@ usersRouter.get('/', async (req, res, next) => {
 });
 
 // Get User by Id
-usersRouter.get('/:id', async (req, res, next) => {
+usersRouter.get('/:id', auth, async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
@@ -36,8 +40,31 @@ usersRouter.post('/', async (req, res, next) => {
   }
 });
 
+// Login User
+usersRouter.post('/login', async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+  const passwordCorrect = user == null
+    ? false
+    : await bcrypt.compare(req.body.password, user.password);
+
+  if (!(user && passwordCorrect)) {
+    return res.status(404).json({ error: 'Unable to Log In' });
+  }
+
+  const userForToken = {
+    email: user.email,
+    id: user._id,
+  };
+
+  const token = jwt.sign(userForToken, process.env.SECRET);
+
+  return res.status(200).send({ token, email: user.email, name: user.name });
+});
+
+// Logout User
+
 // Update User
-usersRouter.patch('/:id', async (req, res, next) => {
+usersRouter.patch('/:id', auth, async (req, res, next) => {
   const updates = Object.keys(req.body);
   try {
     const user = await User.findById(req.params.id);
@@ -55,7 +82,7 @@ usersRouter.patch('/:id', async (req, res, next) => {
 });
 
 // Delete User by Id
-usersRouter.delete('/:id', async (req, res, next) => {
+usersRouter.delete('/:id', auth, async (req, res, next) => {
   try {
     const { deletedCount } = await User.deleteOne({ _id: req.params.id });
     if (deletedCount === 0) {

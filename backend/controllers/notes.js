@@ -1,15 +1,16 @@
 const notesRouter = require('express').Router();
 const Note = require('../models/note');
+const { auth } = require('../utils/middleware');
 
 // Get All Notes
-notesRouter.get('/', async (req, res) => {
+notesRouter.get('/', auth, async (req, res) => {
   const notes = await Note.find({});
 
   res.json(notes.map((note) => note.toJSON()));
 });
 
 // Get Note By Id
-notesRouter.get('/:id', async (req, res, next) => {
+notesRouter.get('/:id', auth, async (req, res, next) => {
   try {
     const note = await Note.findById(req.params.id);
     if (!note) {
@@ -22,7 +23,7 @@ notesRouter.get('/:id', async (req, res, next) => {
 });
 
 // Create Note
-notesRouter.post('/', async (req, res, next) => {
+notesRouter.post('/', auth, async (req, res, next) => {
   try {
     const note = new Note({
       ...req.body,
@@ -37,7 +38,7 @@ notesRouter.post('/', async (req, res, next) => {
 });
 
 // Update Note By Id
-notesRouter.patch('/:id', async (req, res, next) => {
+notesRouter.patch('/:id', auth, async (req, res, next) => {
   try {
     const { nModified } = await Note
       .updateOne({ _id: req.params.id }, req.body);
@@ -51,7 +52,7 @@ notesRouter.patch('/:id', async (req, res, next) => {
 });
 
 // Delete Note By Id
-notesRouter.delete('/:id', async (req, res, next) => {
+notesRouter.delete('/:id', auth, async (req, res, next) => {
   try {
     const { deletedCount } = await Note.deleteOne({ _id: req.params.id });
     if (deletedCount === 0) {
