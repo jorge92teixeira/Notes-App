@@ -36,16 +36,34 @@ usersRouter.post('/', async (req, res, next) => {
   }
 });
 
+// Update User
+usersRouter.patch('/:id', async (req, res, next) => {
+  const updates = Object.keys(req.body);
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    updates.forEach((update) => {
+      user[update] = req.body[update];
+    });
+    await user.save();
+    return res.send(user);
+  } catch (e) {
+    return next(e);
+  }
+});
+
 // Delete User by Id
 usersRouter.delete('/:id', async (req, res, next) => {
   try {
     const { deletedCount } = await User.deleteOne({ _id: req.params.id });
     if (deletedCount === 0) {
-      res.status(404).end();
+      return res.status(404).end();
     }
     return res.status(204).end();
   } catch (e) {
-    next(e);
+    return next(e);
   }
 });
 

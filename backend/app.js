@@ -20,6 +20,8 @@ mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true })
     console.log(`error connecting to mongodb: ${error.message}`);
   });
 
+mongoose.set('useCreateIndex', true);
+
 app.use(cors());
 app.use(bodyParser.json());
 
