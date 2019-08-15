@@ -30,7 +30,9 @@ userSchema.plugin(uniqueValidator);
 
 userSchema.pre('save', async function pre(next) {
   const user = this;
-  user.password = await bcrypt.hash(user.password, 10);
+  if (user.isModified('password')) {
+    user.password = await bcrypt.hash(user.password, 10);
+  }
   next();
 });
 

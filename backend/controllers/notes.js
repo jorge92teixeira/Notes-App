@@ -40,13 +40,13 @@ notesRouter.post('/', async (req, res, next) => {
 notesRouter.patch('/:id', async (req, res, next) => {
   try {
     const { nModified } = await Note
-      .updateOne({ _id: req.params.id }, req.body, { new: true });
+      .updateOne({ _id: req.params.id }, req.body);
     if (nModified === 0) {
-      return res.status(400).json({ nModified });
+      return res.status(404).json({ nModified });
     }
     return res.json({ nModified });
   } catch (e) {
-    next(e);
+    return next(e);
   }
 });
 
