@@ -8,7 +8,7 @@ const { auth } = require('../utils/middleware');
 // Get All Users
 usersRouter.get('/', auth, async (req, res, next) => {
   try {
-    const users = await User.find({});
+    const users = await User.find({}).populate('notes');
     res.send(users);
   } catch (e) {
     next(e);
@@ -18,7 +18,7 @@ usersRouter.get('/', auth, async (req, res, next) => {
 // Get User by Id
 usersRouter.get('/:id', auth, async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id).populate('notes');
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -64,10 +64,11 @@ usersRouter.post('/login', async (req, res) => {
 // Logout User
 
 // Update User
-usersRouter.patch('/:id', auth, async (req, res, next) => {
+usersRouter.patch('/me', auth, async (req, res, next) => {
   const updates = Object.keys(req.body);
   try {
-    const user = await User.findById(req.params.id);
+    // const user = await User.findById(req.params.id);
+    const { user } = req;
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -81,13 +82,14 @@ usersRouter.patch('/:id', auth, async (req, res, next) => {
   }
 });
 
-// Delete User by Id
-usersRouter.delete('/:id', auth, async (req, res, next) => {
+// Delete User
+usersRouter.delete('/me', auth, async (req, res, next) => {
   try {
-    const { deletedCount } = await User.deleteOne({ _id: req.params.id });
-    if (deletedCount === 0) {
-      return res.status(404).end();
-    }
+    // const { deletedCount } = await User.deleteOne({ _id: req.params.id });
+    // if (deletedCount === 0) {
+    //   return res.status(404).end();
+    // }
+    await req.user.remove();
     return res.status(204).end();
   } catch (e) {
     return next(e);

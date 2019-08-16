@@ -3,6 +3,7 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const bcrypt = require('bcrypt');
+const Note = require('./note');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -28,7 +29,13 @@ const userSchema = new mongoose.Schema({
 
 userSchema.plugin(uniqueValidator);
 
-userSchema.pre('save', async function pre(next) {
+userSchema.virtual('notes', {
+  ref: 'Note',
+  localField: '_id',
+  foreignField: 'owner',
+});
+
+userSchema.pre('save', async function preSave(next) {
   const user = this;
   if (user.isModified('password')) {
     user.password = await bcrypt.hash(user.password, 10);
@@ -36,7 +43,14 @@ userSchema.pre('save', async function pre(next) {
   next();
 });
 
+userSchema.pre('remove', async function preRemove(next) {
+  const user = this;
+  await Note.deleteMany({ owner: user._id });
+  next();
+});
+
 userSchema.set('toJSON', {
+  getters: true,
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
