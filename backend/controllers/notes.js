@@ -3,17 +3,17 @@ const notesRouter = require('express').Router();
 const Note = require('../models/note');
 const { auth } = require('../utils/middleware');
 
-// Get All Notes
+// Get All Notes - that belong to the user
 notesRouter.get('/', auth, async (req, res) => {
-  const notes = await Note.find({});
+  const notes = await Note.find({ owner: req.user._id });
 
   res.json(notes.map((note) => note.toJSON()));
 });
 
-// Get Note By Id
+// Get Note By Id - note has to belong to user
 notesRouter.get('/:id', auth, async (req, res, next) => {
   try {
-    const note = await Note.findById(req.params.id);
+    const note = await Note.findOne({ _id: req.params.id, owner: req.user._id });
     if (!note) {
       return res.status(404).json({ error: 'Note not found' });
     }
@@ -39,11 +39,11 @@ notesRouter.post('/', auth, async (req, res, next) => {
   }
 });
 
-// Update Note By Id
+// Update Note By Id - only owner can update note
 notesRouter.patch('/:id', auth, async (req, res, next) => {
   try {
     const { nModified } = await Note
-      .updateOne({ _id: req.params.id }, req.body);
+      .updateOne({ _id: req.params.id, owner: req.user._id }, req.body);
     if (nModified === 0) {
       return res.status(404).json({ nModified });
     }
@@ -53,10 +53,10 @@ notesRouter.patch('/:id', auth, async (req, res, next) => {
   }
 });
 
-// Delete Note By Id
+// Delete Note By Id - only owner can delete note
 notesRouter.delete('/:id', auth, async (req, res, next) => {
   try {
-    const { deletedCount } = await Note.deleteOne({ _id: req.params.id });
+    const { deletedCount } = await Note.deleteOne({ _id: req.params.id, owner: req.user._id });
     if (deletedCount === 0) {
       return res.status(404).end();
     }

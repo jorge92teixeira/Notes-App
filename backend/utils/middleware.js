@@ -6,6 +6,7 @@ const unknownEndpoint = (req, res) => {
 };
 
 const errorHandler = (error, req, res, next) => {
+  // ValidationError, CastError, SyntaxError, TypeError
   if (error.name === 'ValidationError') {
     return res.status(400).send({ errName: error.name, errMsg: error.message });
   }
