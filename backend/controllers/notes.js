@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const notesRouter = require('express').Router();
 const Note = require('../models/note');
 const { auth } = require('../utils/middleware');
@@ -29,6 +30,7 @@ notesRouter.post('/', auth, async (req, res, next) => {
       ...req.body,
       pinned: req.body.pinned || false,
       hidden: req.body.hidden || false,
+      owner: req.user._id,
     });
     await note.save();
     res.status(201).send(note);

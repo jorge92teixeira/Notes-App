@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-param-reassign */
 const mongoose = require('mongoose');
+// const User = require('./user');
 
 const noteSchema = new mongoose.Schema({
   title: {
@@ -21,7 +22,12 @@ const noteSchema = new mongoose.Schema({
   hidden: {
     type: Boolean,
   },
-});
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User',
+  },
+}, { timestamps: true });
 
 noteSchema.set('toJSON', {
   transform: (document, returnedObject) => {
