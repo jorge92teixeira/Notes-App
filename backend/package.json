@@ -4,9 +4,9 @@
   "description": "Note App",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm index.js",
-    "backend": "nodemon index.js"
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "backend": "cross-env NODE_ENV=development nodemon index.js"
   },
   "author": "Jorge Teixeira",
   "license": "ISC",
@@ -21,9 +21,15 @@
     "mongoose-unique-validator": "^2.0.3"
   },
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
-    "nodemon": "^1.19.1"
+    "jest": "^24.9.0",
+    "nodemon": "^1.19.1",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }

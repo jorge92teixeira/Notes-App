@@ -5,23 +5,33 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { auth } = require('../utils/middleware');
 
-// Get All Users
-usersRouter.get('/', auth, async (req, res, next) => {
-  try {
-    const users = await User.find({}).populate('notes');
-    res.send(users);
-  } catch (e) {
-    next(e);
-  }
-});
+// // Get All Users
+// usersRouter.get('/', auth, async (req, res, next) => {
+//   try {
+//     const users = await User.find({}).populate('notes');
+//     res.send(users);
+//   } catch (e) {
+//     next(e);
+//   }
+// });
 
-// Get User by Id
-usersRouter.get('/:id', auth, async (req, res, next) => {
+// // Get User by Id
+// usersRouter.get('/:id', auth, async (req, res, next) => {
+//   try {
+//     const user = await User.findById(req.params.id).populate('notes');
+//     if (!user) {
+//       return res.status(404).json({ error: 'User not found' });
+//     }
+//     return res.send(user);
+//   } catch (e) {
+//     return next(e);
+//   }
+// });
+
+// Get User Profile
+usersRouter.get('/me', auth, async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id).populate('notes');
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
+    const { user } = req;
     return res.send(user);
   } catch (e) {
     return next(e);
@@ -61,17 +71,17 @@ usersRouter.post('/login', async (req, res) => {
   return res.status(200).send({ token, email: user.email, name: user.name });
 });
 
-// Logout User
-
 // Update User
 usersRouter.patch('/me', auth, async (req, res, next) => {
   const updates = Object.keys(req.body);
+  const allowedUpdates = ['name', 'email', 'password'];
+  const isValidOperation = updates.every((update) => (allowedUpdates.includes(update)));
+
+  if (!isValidOperation) {
+    return res.status(400).send({ error: 'Invalid updates' });
+  }
   try {
-    // const user = await User.findById(req.params.id);
     const { user } = req;
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
     updates.forEach((update) => {
       user[update] = req.body[update];
     });
