@@ -1,31 +1,21 @@
 const mongoose = require('mongoose');
 const supertest = require('supertest');
-const jwt = require('jsonwebtoken');
 const app = require('../app');
 
 const api = supertest(app);
 const User = require('../models/user');
-
-const userOneId = new mongoose.Types.ObjectId();
-const userOneEmail = 'jorge@jorge.com';
-const userOneToken = jwt.sign({ email: userOneEmail, id: userOneId }, process.env.SECRET);
-const userOne = {
-  _id: userOneId,
-  name: 'Jorge',
-  email: userOneEmail,
-  password: '123456789',
-};
+const helper = require('./test_helper');
 
 beforeEach(async () => {
   await User.deleteMany({});
-  await new User(userOne).save();
+  await new User(helper.userOne).save();
 });
 
 describe('When getting a user profile', () => {
   test('succedes when user is logged in', async () => {
     await api
       .get('/api/users/me')
-      .set('Authorization', `bearer ${userOneToken}`)
+      .set('Authorization', `bearer ${helper.userOneToken}`)
       .send()
       .expect(200);
   });
@@ -38,10 +28,10 @@ describe('When getting a user profile', () => {
   test('receives the user data', async () => {
     const user = await api
       .get('/api/users/me')
-      .set('Authorization', `bearer ${userOneToken}`)
+      .set('Authorization', `bearer ${helper.userOneToken}`)
       .send()
       .expect(200);
-    expect(user.body.email).toEqual(userOne.email);
+    expect(user.body.email).toEqual(helper.userOne.email);
   });
 });
 
@@ -73,8 +63,8 @@ describe('When a user is trying to login', () => {
     await api
       .post('/api/users/login')
       .send({
-        email: userOne.email,
-        password: userOne.password,
+        email: helper.userOne.email,
+        password: helper.userOne.password,
       })
       .expect(200);
   });
@@ -93,7 +83,7 @@ describe('When trying to update user profile', () => {
   test('succedes when user is authenticated and update allowed', async () => {
     const updatedUser = await api
       .patch('/api/users/me')
-      .set('Authorization', `bearer ${userOneToken}`)
+      .set('Authorization', `bearer ${helper.userOneToken}`)
       .send({ name: 'Jorge Teixeira' })
       .expect(200);
     expect(updatedUser.body.name).toBe('Jorge Teixeira');
@@ -101,7 +91,7 @@ describe('When trying to update user profile', () => {
   test('fails when user is authenticated but update is not allowed', async () => {
     await api
       .patch('/api/users/me')
-      .set('Authorization', `bearer ${userOneToken}`)
+      .set('Authorization', `bearer ${helper.userOneToken}`)
       .send({ _id: '123456789' })
       .expect(400);
   });
@@ -123,7 +113,7 @@ describe('When trying to delete user', () => {
   test('succedes if user is authenticated', async () => {
     await api
       .delete('/api/users/me')
-      .set('Authorization', `bearer ${userOneToken}`)
+      .set('Authorization', `bearer ${helper.userOneToken}`)
       .send()
       .expect(204);
   });
