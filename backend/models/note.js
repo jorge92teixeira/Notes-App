@@ -1,7 +1,4 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-param-reassign */
 const mongoose = require('mongoose');
-// const User = require('./user');
 
 const noteSchema = new mongoose.Schema({
   title: {
