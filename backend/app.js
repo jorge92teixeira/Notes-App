@@ -8,16 +8,17 @@ const config = require('./utils/config');
 const notesRouter = require('./controllers/notes');
 const usersRouter = require('./controllers/users');
 const middleware = require('./utils/middleware');
+const { clog } = require('./utils/console_logger');
 
 // connect to database
-console.log(`connecting to ${config.MONGODB_URI}`);
+clog(`connecting to ${config.MONGODB_URI}`);
 
 mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true })
   .then(() => {
-    console.log('connected to mongodb');
+    clog('connected to mongodb');
   })
   .catch((error) => {
-    console.log(`error connecting to mongodb: ${error.message}`);
+    clog(`error connecting to mongodb: ${error.message}`);
   });
 
 mongoose.set('useCreateIndex', true);

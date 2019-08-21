@@ -33,7 +33,6 @@ const auth = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(req.token, process.env.SECRET);
-    // req.user = await User.findOne({ _id: decoded.id });
     req.user = await User.findById(decoded.id);
 
     return next();

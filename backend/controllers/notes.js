@@ -1,13 +1,15 @@
-/* eslint-disable no-underscore-dangle */
 const notesRouter = require('express').Router();
 const Note = require('../models/note');
 const { auth } = require('../utils/middleware');
 
 // Get All Notes - that belong to the user
-notesRouter.get('/', auth, async (req, res) => {
-  const notes = await Note.find({ owner: req.user._id });
-
-  res.json(notes.map((note) => note.toJSON()));
+notesRouter.get('/', auth, async (req, res, next) => {
+  try {
+    const notes = await Note.find({ owner: req.user._id });
+    return res.json(notes.map((note) => note.toJSON()));
+  } catch (e) {
+    return next(e);
+  }
 });
 
 // Get Note By Id - note has to belong to user

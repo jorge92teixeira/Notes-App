@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const Note = require('../models/note');
@@ -45,9 +44,24 @@ const notesInDb = async () => {
   return notes.map((note) => note.toJSON());
 };
 
+const nonExistingId = async () => {
+  const note = new Note({
+    title: 'Will delete soon',
+    content: 'will delete soon',
+    date: new Date(),
+    pinned: false,
+    hidden: false,
+    owner: userOneId,
+  });
+  await note.save();
+  await note.remove();
+  return note._id.toString();
+};
+
 module.exports = {
   userOne,
   userOneToken,
   initialNotes,
   notesInDb,
+  nonExistingId,
 };
