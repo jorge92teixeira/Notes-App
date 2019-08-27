@@ -19,6 +19,7 @@ const initialNotes = [
     date: new Date(),
     pinned: true,
     hidden: false,
+    label: 'dnd',
     owner: userOneId,
   },
   {

@@ -19,6 +19,9 @@ const noteSchema = new mongoose.Schema({
   hidden: {
     type: Boolean,
   },
+  label: {
+    type: String,
+  },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,

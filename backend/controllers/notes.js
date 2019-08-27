@@ -25,6 +25,16 @@ notesRouter.get('/:id', auth, async (req, res, next) => {
   }
 });
 
+// Get notes by label
+notesRouter.get('/label/:id', auth, async (req, res, next) => {
+  try {
+    const notes = await Note.find({ label: req.params.id });
+    return res.json(notes.map((note) => note.toJSON()));
+  } catch (e) {
+    return next(e);
+  }
+});
+
 // Create Note
 notesRouter.post('/', auth, async (req, res, next) => {
   try {
@@ -32,6 +42,7 @@ notesRouter.post('/', auth, async (req, res, next) => {
       ...req.body,
       pinned: req.body.pinned || false,
       hidden: req.body.hidden || false,
+      label: req.body.label || 'noLabel',
       owner: req.user._id,
     });
     await note.save();
