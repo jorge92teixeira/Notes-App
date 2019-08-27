@@ -32,6 +32,7 @@ notesRouter.post('/', auth, async (req, res, next) => {
       ...req.body,
       pinned: req.body.pinned || false,
       hidden: req.body.hidden || false,
+      label: req.body.label || 'noLabel',
       owner: req.user._id,
     });
     await note.save();
