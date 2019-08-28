@@ -1,8 +1,9 @@
 import React from 'react';
+import AddNote from './AddNote';
 
 const App = () => (
   <div>
-    Notes-App
+    <AddNote />
   </div>
 );
 
