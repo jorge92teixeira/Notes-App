@@ -9,3 +9,17 @@ export const addNote = (title, content) => (
     content,
   }
 );
+
+export const setVisibilityFilter = (filter) => {
+  return {
+    type: 'SET_VISIBILITY_FILTER',
+    filter,
+  };
+};
+
+export const toggleNote = (id) => {
+  return {
+    type: 'TOGGLE_NOTE',
+    id,
+  };
+};
