@@ -6,6 +6,14 @@ const note = (state, action) => {
         title: action.title,
         content: action.content,
       };
+    case 'TOGGLE_NOTE':
+      if (state.id !== action.id) {
+        return state;
+      }
+      return {
+        ...state,
+        completed: !state.completed,
+      };
     default:
       return state;
   }
@@ -18,6 +26,8 @@ const notes = (state = [], action) => {
         ...state,
         note(undefined, action),
       ];
+    case 'TOGGLE_NOTE':
+      return state.map((t) => note(t, action));
     default:
       return state;
   }
