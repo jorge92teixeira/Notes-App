@@ -1,9 +1,10 @@
 /* eslint-disable no-plusplus */
-let nextNoteId = 0;
+import { v4 } from 'node-uuid';
+
 export const addNote = (title, content) => (
   {
     type: 'ADD_NOTE',
-    id: (nextNoteId++).toString(),
+    id: v4(),
     title,
     content,
   }
