@@ -35,3 +35,16 @@ const notes = (state = [], action) => {
 };
 
 export default notes;
+
+export const getVisibleNotes = (state, filter) => {
+  switch (filter) {
+    case 'all':
+      return state;
+    case 'completed':
+      return state.filter((n) => n.completed);
+    case 'active':
+      return state.filter((n) => !n.completed);
+    default:
+      throw new Error(`Unknow filter: ${filter}`);
+  }
+};
