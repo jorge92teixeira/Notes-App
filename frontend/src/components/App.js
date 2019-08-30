@@ -1,11 +1,13 @@
 import React from 'react';
 import AddNote from './AddNote';
-import VisibleNoteList from './VisibleNoteList';
+import NoteListContainer from './NoteListContainer';
+import Navigation from './Navigation';
 
 const App = () => (
   <div>
     <AddNote />
-    <VisibleNoteList />
+    <NoteListContainer />
+    <Navigation />
   </div>
 );
 
