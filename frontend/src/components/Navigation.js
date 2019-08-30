@@ -1,21 +1,21 @@
 import React from 'react';
-import LinkContainer from './LinkContainer';
+import LabelContainer from './LabelContainer';
 
 const Navigation = () => (
   <p>
     Show:
     {' '}
-    <LinkContainer filter="SHOW_ALL">
-      ALL
-    </LinkContainer>
+    <LabelContainer filter="all">
+      All
+    </LabelContainer>
     {', '}
-    <LinkContainer filter="SHOW_ACTIVE">
+    <LabelContainer filter="active">
       Active
-    </LinkContainer>
+    </LabelContainer>
     {', '}
-    <LinkContainer filter="SHOW_COMPLETED">
+    <LabelContainer filter="completed">
       Completed
-    </LinkContainer>
+    </LabelContainer>
   </p>
 );
 
