@@ -27,9 +27,9 @@ const mapDispatchToProps = (dispatch) => (
     },
   });
 
-const VisibleNoteList = connect(
+const NoteListContainer = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(NoteList);
 
-export default VisibleNoteList;
+export default NoteListContainer;
