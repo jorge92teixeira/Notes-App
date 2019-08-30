@@ -17,6 +17,7 @@ const AddNote = ({ dispatch }) => {
           }
           dispatch(addNote(inputTitle.value, inputContent.value));
           inputContent.value = '';
+          inputTitle.value = '';
         }}
       >
         Title:

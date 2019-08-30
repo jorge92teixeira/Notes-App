@@ -7,6 +7,9 @@ import notesAppReducer from './reducers/notesAppReducer';
 import App from './components/App';
 
 const store = createStore(notesAppReducer);
+store.subscribe(() => {
+  console.log(store.getState());
+});
 
 ReactDom.render(
   <Provider store={store}>

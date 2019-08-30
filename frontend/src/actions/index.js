@@ -1,5 +1,4 @@
 /* eslint-disable no-plusplus */
-/* eslint-disable import/prefer-default-export */
 let nextNoteId = 0;
 export const addNote = (title, content) => (
   {
@@ -10,16 +9,14 @@ export const addNote = (title, content) => (
   }
 );
 
-export const setVisibilityFilter = (filter) => {
-  return {
+export const setVisibilityFilter = (filter) => (
+  {
     type: 'SET_VISIBILITY_FILTER',
     filter,
-  };
-};
+  });
 
-export const toggleNote = (id) => {
-  return {
+export const toggleNote = (id) => (
+  {
     type: 'TOGGLE_NOTE',
     id,
-  };
-};
+  });

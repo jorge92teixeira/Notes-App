@@ -5,6 +5,7 @@ const note = (state, action) => {
         id: action.id,
         title: action.title,
         content: action.content,
+        completed: false,
       };
     case 'TOGGLE_NOTE':
       if (state.id !== action.id) {
@@ -27,7 +28,7 @@ const notes = (state = [], action) => {
         note(undefined, action),
       ];
     case 'TOGGLE_NOTE':
-      return state.map((t) => note(t, action));
+      return state.map((n) => note(n, action));
     default:
       return state;
   }

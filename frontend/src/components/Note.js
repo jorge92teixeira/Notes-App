@@ -12,7 +12,7 @@ const Note = ({
   <li
     onClick={onClick}
     style={{
-      textDecoration: completed ? 'line-through' : NamedNodeMap,
+      textDecoration: completed ? 'line-through' : 'none',
     }}
   >
     {title}
