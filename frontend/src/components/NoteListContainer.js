@@ -1,23 +1,24 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { toggleNote } from '../actions';
 import NoteList from './NoteList';
 
 const getVisibleNotes = (notes, filter) => {
   switch (filter) {
-    case 'SHOW_ALL':
+    case 'all':
       return notes;
-    case 'SHOW_COMPLETED':
+    case 'completed':
       return notes.filter((n) => n.completed);
-    case 'SHOW_ACTIVE':
+    case 'active':
       return notes.filter((n) => !n.completed);
     default:
       throw new Error(`Unknow filter: ${filter}`);
   }
 };
 
-const mapStateToProps = (state) => (
+const mapStateToProps = (state, { match }) => (
   {
-    notes: getVisibleNotes(state.notes, state.visibilityFilter),
+    notes: getVisibleNotes(state.notes, match.params.filter || 'all'),
   });
 
 const mapDispatchToProps = (dispatch) => (
@@ -27,9 +28,9 @@ const mapDispatchToProps = (dispatch) => (
     },
   });
 
-const NoteListContainer = connect(
+const NoteListContainer = withRouter(connect(
   mapStateToProps,
   mapDispatchToProps,
-)(NoteList);
+)(NoteList));
 
 export default NoteListContainer;
