@@ -16,9 +16,6 @@ const noteSchema = new mongoose.Schema({
   pinned: {
     type: Boolean,
   },
-  hidden: {
-    type: Boolean,
-  },
   label: {
     type: String,
   },
