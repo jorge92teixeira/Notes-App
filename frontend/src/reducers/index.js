@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
+import notesReducer from './notesReducer';
 
 const rootReducer = combineReducers({
-  replaceMe: () => 'hello there'
+  notes: notesReducer,
 });
 
 export default rootReducer;

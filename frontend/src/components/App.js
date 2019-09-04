@@ -1,11 +1,12 @@
 import React from 'react';
+import NoteList from './NoteList';
 
 const App = () => {
   return (
     <div>
-      App
+      <NoteList />
     </div>
-  )
+  );
 };
 
 export default App;
