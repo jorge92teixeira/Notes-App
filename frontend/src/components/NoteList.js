@@ -9,6 +9,7 @@ class NoteList extends React.Component {
   }
 
   render() {
+    console.log('notes', this.props.notes);
     return(
       <div>
         Note List
@@ -17,7 +18,13 @@ class NoteList extends React.Component {
   }
 };
 
+const mapStateToProps = (state) => {
+  return {
+    notes: state.notes,
+  }
+};
+
 export default connect(
-  null,
+  mapStateToProps,
   { fetchNotes },
 )(NoteList);
