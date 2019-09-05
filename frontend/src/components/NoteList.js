@@ -8,11 +8,21 @@ class NoteList extends React.Component {
     this.props.fetchNotes();
   }
 
+  renderList() {
+    return this.props.notes.map(note => {
+      return (
+        <div key={note.id}>
+          <h2>{note.title}</h2>
+          <p>{note.content}</p>
+        </div>
+      )
+    })
+  }
+
   render() {
-    console.log('notes', this.props.notes);
     return(
       <div>
-        Note List
+        {this.renderList()}
       </div>
     )
   }
